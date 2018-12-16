@@ -11,7 +11,9 @@ error_base = {
     3: 'Such user already exists',
     4: 'No such user',
     5: 'Incorrect password',
-    6: 'No such token'
+    6: 'No such token',
+    7: 'Parent task don\'t exists',
+    8: 'You can\'t inherit from someone else\'s task'
 }
 
 
@@ -49,3 +51,28 @@ def get_token(db, login):
     user_id = query(db, 'SELECT `id` FROM users WHERE `login`="{}"'.format(login), True)[0][0]
     query(db, 'INSERT INTO sessions (`token`, `user_id`) VALUES ("{}", "{}")'.format(token, user_id))
     return token
+
+
+def check_token(db, token):
+    res = query(db, 'SELECT * FROM sessions WHERE `token`="{}"'.format(token), True)
+    if not res:
+        return False
+    return res[0][2]
+
+
+def process_task(task):
+    return {
+        'id': task[0],
+        'name': task[1],
+        'parent_id': task[2],
+        'progress': task[3],
+        'description': task[4],
+        'priority': task[5]
+    }
+
+
+def process_task_list(task_list):
+    res = []
+    for task in task_list:
+        res.append(process_task(task))
+    return res

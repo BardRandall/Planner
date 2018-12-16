@@ -1,7 +1,11 @@
 from web.app import app
 from flask import request
-from web.Adapters import check_args, generate_answer, query, myhash, get_token
+from web.Adapters import check_args, generate_answer, \
+    query, myhash, get_token, check_token, process_task, process_task_list
 from web.MySQL import db
+
+
+required_task_fields = '`id`, `name`, `parent_id`, `progress`, `description`, `priority`'
 
 
 @app.route('/')
@@ -13,7 +17,7 @@ def index():
 def register():
     if check_args(request.args, 'login', 'password'):
         login = request.args['login']
-        password = request.args['login']
+        password = request.args['password']
         if query(db, 'SELECT * FROM users WHERE `login`="{}"'.format(login), True):
             return generate_answer(False, error_code=3)
         query(db, 'INSERT INTO users (`login`, `password`) VALUES ("{}", "{}")'.format(login, myhash(password)))
@@ -48,24 +52,60 @@ def logout():
     return generate_answer(False, error_code=2)
 
 
-@app.route('/api/tasks/create', methods=['GET'])
+@app.route('/api/tasks/create', methods=['GET'])  # TODO support of deadlines
 def create():
-    if 'token' in request.args and \
-            'name' in request.args:
-        return 'Created {} task'.format(request.args['name'])
-    return 'Incorrect'
+    if not check_args(request.args, 'token', 'name'):
+        return generate_answer(False, error_code=2)
+    token = request.args['token']
+    name = request.args['name']
+    description = ''
+    parent_id = 'NULL'
+    # deadline = 'NULL'
+    priority = 3
+    user_id = check_token(db, token)
+    if not user_id:
+        return generate_answer(False, error_code=6)
+    if check_args(request.args, 'description'):
+        description = request.args['description']
+    if check_args(request.args, 'parent_id'):
+        parent_id = request.args['parent_id']
+        res = query(db, 'SELECT * FROM tasks WHERE `id`="{}"'.format(parent_id), True)
+        if not res:
+            return generate_answer(False, error_code=7)
+        if res[0][1] != user_id:
+            return generate_answer(False, error_code=8)
+    if check_args(request.args, 'priority'):
+        priority = request.args['priority']
+    query(db,
+          'INSERT INTO tasks (`user_id`, `name`, `parent_id`, `description`, `priority`) VALUES ({}, "{}", {}, "{}", {})'
+          .format(user_id, name, parent_id, description, priority))
+    return generate_answer(True, {})
 
 
-@app.route('/api/tasks/get_by_user', methods=['GET'])
+@app.route('/api/tasks/get_by_user', methods=['GET'])  # TODO deadline
 def get_by_user():
-    if 'token' in request.args:
-        return 'Got tasks for token ' + request.args['token']
-    return 'Incorrect'
+    if not check_args(request.args, 'token'):
+        return generate_answer(False, error_code=2)
+    user_id = check_token(db, request.args['token'])
+    if not user_id:
+        return generate_answer(False, error_code=6)
+    res = query(db,
+                'SELECT {} FROM tasks WHERE `user_id`={}'.format(required_task_fields, user_id),
+                True)
+    return generate_answer(True, process_task_list(res))
 
 
 @app.route('/api/tasks/get_related', methods=['GET'])
 def get_related():
-    pass
+    if not check_args(request.args, 'token', 'id'):
+        return generate_answer(False, error_code=2)
+    user_id = check_token(db, request.args['token'])
+    if not user_id:
+        return generate_answer(False, error_code=6)
+    res = query(db,
+                'SELECT {} FROM tasks WHERE `user_id`={} AND `parent_id`={}'
+                .format(required_task_fields, user_id, request.args['id']), True)
+    return generate_answer(True, process_task_list(res))
 
 
 @app.route('/api/tasks/update', methods=['GET'])
