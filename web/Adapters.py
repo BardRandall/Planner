@@ -13,7 +13,9 @@ error_base = {
     5: 'Incorrect password',
     6: 'No such token',
     7: 'Parent task don\'t exists',
-    8: 'You can\'t inherit from someone else\'s task'
+    8: 'You can\'t inherit from someone else\'s task',
+    9: 'Short password',
+    10: 'No related tasks'
 }
 
 

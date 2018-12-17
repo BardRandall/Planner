@@ -20,6 +20,8 @@ def register():
         password = request.args['password']
         if query(db, 'SELECT * FROM users WHERE `login`="{}"'.format(login), True):
             return generate_answer(False, error_code=3)
+        if len(password) < 6:
+            return generate_answer(False, error_code=9)
         query(db, 'INSERT INTO users (`login`, `password`) VALUES ("{}", "{}")'.format(login, myhash(password)))
         return generate_answer(True, {'token': get_token(db, login)})
     return generate_answer(False, error_code=2)
@@ -105,6 +107,8 @@ def get_related():
     res = query(db,
                 'SELECT {} FROM tasks WHERE `user_id`={} AND `parent_id`={}'
                 .format(required_task_fields, user_id, request.args['id']), True)
+    if not res:
+        return generate_answer(False, error_code=10)
     return generate_answer(True, process_task_list(res))
 
 
