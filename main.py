@@ -60,3 +60,9 @@ app = QApplication(sys.argv)
 ex = MyWidget()
 ex.show()
 sys.exit(app.exec_())
+
+mimeData = QtCore.QMimeData()
+mimeData.setText(fileName)    # filename or index in the list or any other data that describe the object
+
+drag = QtGui.QDrag(self)
+drag.setMimeData(mimeData)
