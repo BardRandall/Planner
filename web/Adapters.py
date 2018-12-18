@@ -48,16 +48,27 @@ def generate_answer(success, obj=None, error_code=1):
     return json.dumps(res)
 
 
-def query(sql, is_return=False):
-    global db
+def base_query(sql, is_return):
     cursor = db.cursor()
     cursor.execute(sql)
     if is_return:
         res = cursor.fetchall()
         cursor.close()
+        print('Success return: ' + sql)
         return res
     cursor.execute('COMMIT;')
     cursor.close()
+    print('Success: ' + sql)
+
+
+def query(sql, is_return=False):
+    try:
+        return base_query(sql, is_return)
+    except Exception:
+        print('Trying to reconnect...')
+        init_db()
+        return base_query(sql, is_return)
+
 
 
 def myhash(data):
@@ -67,7 +78,7 @@ def myhash(data):
 def get_token(login):
     token = hashlib.md5((login + str(random.randint(0, 255)) + str(datetime.datetime.now()) + salt).encode('utf-8')).hexdigest()
     user_id = query('SELECT `id` FROM users WHERE `login`="{}"'.format(login), True)[0][0]
-    query('INSERT INTO sessions (`token`, `user_id`) VALUES ("{}", "{}")'.format(token, user_id))
+    query('INSERT INTO sessions (`token`, `user_id`) VALUES ("{}", {})'.format(token, user_id))
     return token
 
 

@@ -26,8 +26,8 @@ def register():
     return generate_answer(False, error_code=2)
 
 
-@app.route('/api/login', methods=['GET'])
-def log_in():
+@app.route('/api/login', methods=['GET'])  # create from one to four different tokens of different users
+def log_in():  # but return is correct
     if check_args(request.args, 'login', 'password'):
         login = request.args['login']
         password = request.args['password']
