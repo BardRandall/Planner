@@ -1,4 +1,4 @@
-from web.app import app
+from web.main import app
 from flask import request
 from web.Adapters import check_args, generate_answer, \
     query, myhash, get_token, check_token, process_task, process_task_list
