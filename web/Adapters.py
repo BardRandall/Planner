@@ -41,7 +41,8 @@ def query(db, sql, is_return=False):
     cursor.execute(sql)
     if is_return:
         return cursor.fetchall()
-    cursor.execute('COMMIT;')
+    else:
+        cursor.execute('COMMIT;')
 
 
 def myhash(data):

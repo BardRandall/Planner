@@ -112,7 +112,7 @@ def get_related():
     return generate_answer(True, process_task_list(res))
 
 
-@app.route('/api/tasks/update', methods=['GET'])
+@app.route('/api/tasks/update', methods=['GET'])  # TODO bug with get_related - task doubles
 def update():
     pass
 
