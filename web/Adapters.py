@@ -5,14 +5,18 @@ import datetime
 import pymysql
 import pymysql.cursors
 from web.config import db_host, db_user, db_pass, db_name
+
+
 db = pymysql.connect(db_host, db_user, db_pass, db_name)
+salt = 'saltforpasswords'
+
 
 def init_db():
     global db
+    db.close()
     db = pymysql.connect(db_host, db_user, db_pass, db_name)
 
 
-salt = 'saltforpasswords'
 error_base = {
     1: 'Server Error',
     2: 'Required args empty',
@@ -45,25 +49,15 @@ def generate_answer(success, obj=None, error_code=1):
 
 
 def query(sql, is_return=False):
-    try:
-        cursor = db.cursor()
-        cursor.execute(sql)
-        if is_return:
-            res = cursor.fetchall()
-            cursor.close()
-            return res
-        cursor.execute('COMMIT;')
+    global db
+    cursor = db.cursor()
+    cursor.execute(sql)
+    if is_return:
+        res = cursor.fetchall()
         cursor.close()
-    except (AttributeError, pymysql.OperationalError):
-        init_db()
-        cursor = db.cursor()
-        cursor.execute(sql)
-        if is_return:
-            res = cursor.fetchall()
-            cursor.close()
-            return res
-        cursor.execute('COMMIT;')
-        cursor.close()
+        return res
+    cursor.execute('COMMIT;')
+    cursor.close()
 
 
 def myhash(data):
@@ -77,7 +71,7 @@ def get_token(login):
     return token
 
 
-def check_token(db, token):
+def check_token(token):
     res = query('SELECT * FROM sessions WHERE `token`="{}"'.format(token), True)
     if not res:
         return False

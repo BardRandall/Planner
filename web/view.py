@@ -1,7 +1,7 @@
 from web.main import app
 from flask import request
 from web.Adapters import check_args, generate_answer, \
-    query, myhash, get_token, check_token, process_task, process_task_list, db
+    query, myhash, get_token, check_token, process_task_list, db
 
 
 required_task_fields = '`id`, `name`, `parent_id`, `progress`, `description`, `priority`'
@@ -21,7 +21,7 @@ def register():
             return generate_answer(False, error_code=3)
         if len(password) < 6:
             return generate_answer(False, error_code=9)
-        query(db, 'INSERT INTO users (`login`, `password`) VALUES ("{}", "{}")'.format(login, myhash(password)))
+        query('INSERT INTO users (`login`, `password`) VALUES ("{}", "{}")'.format(login, myhash(password)))
         return generate_answer(True, {'token': get_token(login)})
     return generate_answer(False, error_code=2)
 
@@ -48,7 +48,7 @@ def logout():
         res = query('SELECT * FROM sessions WHERE `token`="{}"'.format(token), True)
         if not res:
             return generate_answer(False, error_code=6)
-        query(db, 'DELETE FROM sessions WHERE `token`="{}"'.format(token))
+        query('DELETE FROM sessions WHERE `token`="{}"'.format(token))
         return generate_answer(True, {})
     return generate_answer(False, error_code=2)
 
@@ -63,7 +63,7 @@ def create():
     parent_id = 'NULL'
     # deadline = 'NULL'
     priority = 3
-    user_id = check_token(db, token)
+    user_id = check_token(token)
     if not user_id:
         return generate_answer(False, error_code=6)
     if check_args(request.args, 'description'):
@@ -77,8 +77,7 @@ def create():
             return generate_answer(False, error_code=8)
     if check_args(request.args, 'priority'):
         priority = request.args['priority']
-    query(db,
-          'INSERT INTO tasks (`user_id`, `name`, `parent_id`, `description`, `priority`) VALUES ({}, "{}", {}, "{}", {})'
+    query('INSERT INTO tasks (`user_id`, `name`, `parent_id`, `description`, `priority`) VALUES ({}, "{}", {}, "{}", {})'
           .format(user_id, name, parent_id, description, priority))
     return generate_answer(True, {})
 
@@ -87,7 +86,7 @@ def create():
 def get_by_user():
     if not check_args(request.args, 'token'):
         return generate_answer(False, error_code=2)
-    user_id = check_token(db, request.args['token'])
+    user_id = check_token(request.args['token'])
     if not user_id:
         return generate_answer(False, error_code=6)
     res = query('SELECT {} FROM tasks WHERE `user_id`={}'.format(required_task_fields, user_id),
@@ -99,7 +98,7 @@ def get_by_user():
 def get_related():
     if not check_args(request.args, 'token', 'id'):
         return generate_answer(False, error_code=2)
-    user_id = check_token(db, request.args['token'])
+    user_id = check_token(request.args['token'])
     if not user_id:
         return generate_answer(False, error_code=6)
     res = query('SELECT {} FROM tasks WHERE `user_id`={} AND `parent_id`={}'
