@@ -2,6 +2,14 @@ import json
 import hashlib
 import random
 import datetime
+import pymysql
+import pymysql.cursors
+from web.config import db_host, db_user, db_pass, db_name
+db = pymysql.connect(db_host, db_user, db_pass, db_name)
+
+def init_db():
+    global db
+    db = pymysql.connect(db_host, db_user, db_pass, db_name)
 
 
 salt = 'saltforpasswords'
@@ -36,28 +44,41 @@ def generate_answer(success, obj=None, error_code=1):
     return json.dumps(res)
 
 
-def query(db, sql, is_return=False):
-    cursor = db.cursor()
-    cursor.execute(sql)
-    if is_return:
-        return cursor.fetchall()
-    else:
+def query(sql, is_return=False):
+    try:
+        cursor = db.cursor()
+        cursor.execute(sql)
+        if is_return:
+            res = cursor.fetchall()
+            cursor.close()
+            return res
         cursor.execute('COMMIT;')
+        cursor.close()
+    except (AttributeError, pymysql.OperationalError):
+        init_db()
+        cursor = db.cursor()
+        cursor.execute(sql)
+        if is_return:
+            res = cursor.fetchall()
+            cursor.close()
+            return res
+        cursor.execute('COMMIT;')
+        cursor.close()
 
 
 def myhash(data):
     return hashlib.md5((data + salt).encode('utf-8')).hexdigest()
 
 
-def get_token(db, login):
+def get_token(login):
     token = hashlib.md5((login + str(random.randint(0, 255)) + str(datetime.datetime.now()) + salt).encode('utf-8')).hexdigest()
-    user_id = query(db, 'SELECT `id` FROM users WHERE `login`="{}"'.format(login), True)[0][0]
-    query(db, 'INSERT INTO sessions (`token`, `user_id`) VALUES ("{}", "{}")'.format(token, user_id))
+    user_id = query('SELECT `id` FROM users WHERE `login`="{}"'.format(login), True)[0][0]
+    query('INSERT INTO sessions (`token`, `user_id`) VALUES ("{}", "{}")'.format(token, user_id))
     return token
 
 
 def check_token(db, token):
-    res = query(db, 'SELECT * FROM sessions WHERE `token`="{}"'.format(token), True)
+    res = query('SELECT * FROM sessions WHERE `token`="{}"'.format(token), True)
     if not res:
         return False
     return res[0][2]

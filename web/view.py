@@ -1,8 +1,7 @@
-from web.app import app
+from web.main import app
 from flask import request
 from web.Adapters import check_args, generate_answer, \
-    query, myhash, get_token, check_token, process_task, process_task_list
-from web.MySQL import db
+    query, myhash, get_token, check_token, process_task, process_task_list, db
 
 
 required_task_fields = '`id`, `name`, `parent_id`, `progress`, `description`, `priority`'
@@ -18,12 +17,12 @@ def register():
     if check_args(request.args, 'login', 'password'):
         login = request.args['login']
         password = request.args['password']
-        if query(db, 'SELECT * FROM users WHERE `login`="{}"'.format(login), True):
+        if query('SELECT * FROM users WHERE `login`="{}"'.format(login), True):
             return generate_answer(False, error_code=3)
         if len(password) < 6:
             return generate_answer(False, error_code=9)
         query(db, 'INSERT INTO users (`login`, `password`) VALUES ("{}", "{}")'.format(login, myhash(password)))
-        return generate_answer(True, {'token': get_token(db, login)})
+        return generate_answer(True, {'token': get_token(login)})
     return generate_answer(False, error_code=2)
 
 
@@ -32,13 +31,13 @@ def log_in():
     if check_args(request.args, 'login', 'password'):
         login = request.args['login']
         password = request.args['password']
-        res = query(db, 'SELECT * FROM users WHERE `login`="{}"'.format(login), True)
+        res = query('SELECT * FROM users WHERE `login`="{}"'.format(login), True)
         if not res:
             return generate_answer(False, error_code=4)
         user_pass = res[0][2]
         if myhash(password) != user_pass:
             return generate_answer(False, error_code=5)
-        return generate_answer(True, {'token': get_token(db, login)})
+        return generate_answer(True, {'token': get_token(login)})
     return generate_answer(False, error_code=2)
 
 
@@ -46,7 +45,7 @@ def log_in():
 def logout():
     if check_args(request.args, 'token'):
         token = request.args['token']
-        res = query(db, 'SELECT * FROM sessions WHERE `token`="{}"'.format(token), True)
+        res = query('SELECT * FROM sessions WHERE `token`="{}"'.format(token), True)
         if not res:
             return generate_answer(False, error_code=6)
         query(db, 'DELETE FROM sessions WHERE `token`="{}"'.format(token))
@@ -71,7 +70,7 @@ def create():
         description = request.args['description']
     if check_args(request.args, 'parent_id'):
         parent_id = request.args['parent_id']
-        res = query(db, 'SELECT * FROM tasks WHERE `id`="{}"'.format(parent_id), True)
+        res = query('SELECT * FROM tasks WHERE `id`="{}"'.format(parent_id), True)
         if not res:
             return generate_answer(False, error_code=7)
         if res[0][1] != user_id:
@@ -91,8 +90,7 @@ def get_by_user():
     user_id = check_token(db, request.args['token'])
     if not user_id:
         return generate_answer(False, error_code=6)
-    res = query(db,
-                'SELECT {} FROM tasks WHERE `user_id`={}'.format(required_task_fields, user_id),
+    res = query('SELECT {} FROM tasks WHERE `user_id`={}'.format(required_task_fields, user_id),
                 True)
     return generate_answer(True, process_task_list(res))
 
@@ -104,8 +102,7 @@ def get_related():
     user_id = check_token(db, request.args['token'])
     if not user_id:
         return generate_answer(False, error_code=6)
-    res = query(db,
-                'SELECT {} FROM tasks WHERE `user_id`={} AND `parent_id`={}'
+    res = query('SELECT {} FROM tasks WHERE `user_id`={} AND `parent_id`={}'
                 .format(required_task_fields, user_id, request.args['id']), True)
     if not res:
         return generate_answer(False, error_code=10)
