@@ -108,10 +108,10 @@ def get_related():
     return generate_answer(True, process_task_list(res))
 
 
-@app.route('/api/tasks/update', methods=['GET'])  # TODO bug with get_related - task doubles
+@app.route('/api/tasks/update', methods=['GET'])
 def update():
     pass
-
+# ограничить priority
 
 @app.errorhandler(404)
 def page_not_found(e):
