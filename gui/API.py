@@ -75,3 +75,16 @@ class API:
 
     def get_related(self, task_id):
         return self._get_answer('tasks/get_related', token=self.token, id=task_id)
+
+    def update(self, task_id, name=None, description=None, priority=None):
+        query_data = {}
+        if name is not None:
+            query_data['name'] = name
+        if description is not None:
+            query_data['description'] = description
+        if priority is not None:
+            query_data['priority'] = priority
+        return self._get_answer('tasks/update', token=self.token, id=task_id, **query_data)
+
+    def delete(self, task_id):
+        return self._get_answer('tasks/delete', token=self.token, id=task_id)
