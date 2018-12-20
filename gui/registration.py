@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QApplication, QPushButton, \
     QLCDNumber, QLineEdit, QMainWindow
 
 
-class Example(QMainWindow):
+class Registration (QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -19,13 +19,15 @@ class Example(QMainWindow):
 
 
     def run_save(self):
-        self.log = self.login.text()
-        self.pasw = self.password.text()
-
+        self.login = self.log.text()
+        self.password = self.pasw.text()
+        print(self.login)
+        print(self.password)
 
 if __name__ == '__main__':
     api = API()
     app = QApplication(sys.argv)
-    ex = Example()
+    ex = Registration()
     ex.show()
     sys.exit(app.exec_())
+
