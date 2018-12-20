@@ -1,7 +1,7 @@
 from web.main import app
 from flask import request
 from web.Adapters import check_args, generate_answer, \
-    query, myhash, get_token, check_token, process_task_list, db
+    query, myhash, get_token, check_token, process_task_list, get_update_sql
 
 
 required_task_fields = '`id`, `name`, `parent_id`, `progress`, `description`, `priority`'
@@ -101,17 +101,47 @@ def get_related():
     user_id = check_token(request.args['token'])
     if not user_id:
         return generate_answer(False, error_code=6)
+    try:
+        task_id = int(request.args['id'])
+    except ValueError:
+        return generate_answer(False, error_code=12)
     res = query('SELECT {} FROM tasks WHERE `user_id`={} AND `parent_id`={}'
-                .format(required_task_fields, user_id, request.args['id']), True)
-    if not res:
-        return generate_answer(False, error_code=10)
+                .format(required_task_fields, user_id, task_id), True)
     return generate_answer(True, process_task_list(res))
 
 
-@app.route('/api/tasks/update', methods=['GET'])
+@app.route('/api/tasks/update', methods=['GET'])  # check type
 def update():
-    pass
-# ограничить priority
+    if not check_args(request.args, 'id', 'token'):
+        return generate_answer(False, error_code=2)
+    try:
+        task_id = int(request.args['id'])
+    except ValueError:
+        return generate_answer(False, error_code=12)
+    user_id = check_token(request.args['token'])
+    if not user_id:
+        return generate_answer(False, error_code=6)
+    res = query('SELECT * FROM tasks WHERE `id`={} AND `user_id`="{}"'.format(task_id, user_id), True)
+    if not res:
+        return generate_answer(False, error_code=13)
+    name, description, priority = None, None, None
+    if check_args(request.args, 'name'):
+        name = request.args['name']
+    if check_args(request.args, 'description'):
+        description = request.args['description']
+    if check_args(request.args, 'priority'):
+        priority = request.args['priority']
+        try:
+            priority = int(priority)
+        except ValueError:
+            return generate_answer(False, error_code=12)
+        if priority > 5 or priority < 1:
+            return generate_answer(False, error_code=11)
+    if name is None and description is None and priority is None:
+        return generate_answer(False, error_code=2)
+    query(get_update_sql(task_id, name, description, priority))
+    return generate_answer(True, {})
+
 
 @app.errorhandler(404)
 def page_not_found(e):

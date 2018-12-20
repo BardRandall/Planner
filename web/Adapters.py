@@ -27,7 +27,10 @@ error_base = {
     7: 'Parent task don\'t exists',
     8: 'You can\'t inherit from someone else\'s task',
     9: 'Short password',
-    10: 'No related tasks'
+    10: 'No related tasks',  # useless
+    11: 'Bad priority',
+    12: 'Incorrect input type',
+    13: 'Access error'
 }
 
 
@@ -70,7 +73,6 @@ def query(sql, is_return=False):
         return base_query(sql, is_return)
 
 
-
 def myhash(data):
     return hashlib.md5((data + salt).encode('utf-8')).hexdigest()
 
@@ -105,3 +107,17 @@ def process_task_list(task_list):
     for task in task_list:
         res.append(process_task(task))
     return res
+
+
+def get_update_sql(task_id, name, description, priority):
+    sql = 'UPDATE `tasks` SET '
+    sql_data = []
+    if name is not None:
+        sql_data.append('`name`="{}"'.format(name))
+    if description is not None:
+        sql_data.append('`description`="{}"'.format(description))
+    if priority is not None:
+        sql_data.append('`priority`={}'.format(priority))
+    sql += ', '.join(sql_data) + ' '
+    sql += 'WHERE `id`={}'.format(task_id)
+    return sql
