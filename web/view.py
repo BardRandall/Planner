@@ -143,6 +143,24 @@ def update():
     return generate_answer(True, {})
 
 
+@app.route('/api/tasks/delete', methods=['GET'])
+def delete():
+    if not check_args(request.args, 'token', 'id'):
+        return generate_answer(False, error_code=2)
+    try:
+        task_id = int(request.args['id'])
+    except ValueError:
+        return generate_answer(False, error_code=12)
+    user_id = check_token(request.args['token'])
+    if not user_id:
+        return generate_answer(False, error_code=6)
+    res = query('SELECT * FROM tasks WHERE `id`={} AND `user_id`={}'.format(task_id, user_id), True)
+    if not res:
+        return generate_answer(False, error_code=13)
+    query('DELETE FROM tasks WHERE `id`={0} OR `parent_id`={0}'.format(task_id))
+    return generate_answer(True, {})
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return 'Page not found - my own page'
