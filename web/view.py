@@ -28,7 +28,7 @@ def register():
 
 @app.route('/api/login', methods=['GET'])  # create from one to four different tokens of different users
 def log_in():  # but return is correct
-    if check_args(request.args, 'login', 'password'):
+    if check_args(request.args, 'login', 'password'):  # just a magic
         login = request.args['login']
         password = request.args['password']
         res = query('SELECT * FROM users WHERE `login`="{}"'.format(login), True)
