@@ -1,21 +1,18 @@
 import sys
-from PyQt5 import uic
+from gui.API import API
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
-from gui.run import change_scene_to
+from gui.login import init as login_init
 
 
-class MyWidget(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('login.ui',self)
-        self.pushButton.clicked.connect(self.run)
-
-    def run(self):
-        uic.loadUi('register.ui', self)
-
+        login_init(self, api)
 
 
 if __name__ == '__main__':
+    api = API()
     app = QApplication(sys.argv)
-    ex = MyWidget()
+    ex = MainWindow()
     ex.show()
+    sys.exit(app.exec_())

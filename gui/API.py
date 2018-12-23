@@ -19,6 +19,9 @@ class Error:
     def __repr__(self):
         return 'Error {}: {}'.format(self.code, self.desc)
 
+    def __bool__(self):
+        return False
+
 
 class API:
 
