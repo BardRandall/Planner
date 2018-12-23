@@ -24,10 +24,13 @@ class Registration (QMainWindow):
         print(self.login)
         print(self.password)
 
+
 if __name__ == '__main__':
     api = API()
     app = QApplication(sys.argv)
     ex = Registration()
     ex.show()
     sys.exit(app.exec_())
+
+
 

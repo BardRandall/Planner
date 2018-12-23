@@ -24,6 +24,7 @@ class Door(Registration):
 
 
 
+
     def run_pass(self):
         self.login_sr = self.login_input.text()
         self.password_sr = self.password_input.text()
@@ -33,13 +34,13 @@ class Door(Registration):
 
     def reg_run(self):
         uic.loadUi('registration.ui', self)
-        self.saver.clicked.connect(self.save_initialization())
+
 
 
 
     def save_initialization(self):
-        api.register(self.log.text(), self.pasw.text())
-        uic.loadUi('The Imperor planner.ui', self)
+        api.register(Registration.log.text(), Registration.pasw.text())
+
 
 
 if __name__ == '__main__':
