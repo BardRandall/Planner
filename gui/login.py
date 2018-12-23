@@ -4,13 +4,20 @@ from functools import partial
 
 
 def run_login(obj, api):
-    login = obj.lineEdit.text()
-    password = obj.lineEdit_2.text()
+    login = obj.loginEdit.text()
+    password = obj.passEdit.text()
     res = api.login(login, password)
     if type(res) == Error:
-        pass
+        if res.code == 2:
+            obj.errorLabel.setText('Логин или пароль пустые')
+        elif res.code == 4:
+            obj.errorLabel.setText('Такого пользователя не существует')
+        elif res.code == 5:
+            obj.errorLabel.setText('Логин или пароль не верный')
+        else:
+            obj.errorLabel.setText('Неизвестная ошибка')
     else:
-        obj.lineEdit.setText('Login successful')
+        obj.loginEdit.setText('Login successful')
 
 
 def run_reg(obj):
