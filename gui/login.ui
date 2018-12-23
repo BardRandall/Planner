@@ -68,7 +68,7 @@
      <string>Пароль</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="loginEdit">
     <property name="geometry">
      <rect>
       <x>220</x>
@@ -78,7 +78,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="passEdit">
     <property name="geometry">
      <rect>
       <x>220</x>
@@ -88,7 +88,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox">
+   <widget class="QCheckBox" name="rememberCheck">
     <property name="geometry">
      <rect>
       <x>180</x>
@@ -101,7 +101,7 @@
      <string>Запомнить меня</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="loginButton">
     <property name="geometry">
      <rect>
       <x>130</x>
@@ -114,7 +114,7 @@
      <string>Войти</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="regButton">
     <property name="geometry">
      <rect>
       <x>290</x>

@@ -1,8 +1,22 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
+from gui.API import Error
+from functools import partial
 
 
-class MyWidget(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        uic.loadUi('register.ui', self)
+def run_reg(obj, api):
+    login = obj.lineEdit.text()
+    password = obj.lineEdit_2.text()
+    res = api.login(login, password)
+    if type(res) == Error:
+        pass
+    else:
+        obj.lineEdit.setText('Login successful')
+
+
+def run_login(obj):
+    obj.change_scene('login')
+
+
+def init(obj, api):
+    uic.loadUi('register.ui', obj)
+    obj.loginButton.clicked.connect(partial(run_login, obj))
