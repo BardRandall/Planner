@@ -3,21 +3,35 @@ import json
 
 server = 'http://yandexplanner.pythonanywhere.com/api/'
 
+error_base = {
+    1: 'Ошибка сервера',
+    2: 'Пустые данные',
+    3: 'Пользователь с таким логином',
+    4: 'Нет пользователя с таким логином',
+    5: 'Неверный логин или пароль',
+    6: 'Токена не существует',
+    7: 'Родительский таск не существует',
+    8: 'Ошибка доступа',
+    9: 'Короткий пароль',
+    10: 'Нет родительских тасков',  # useless
+    11: 'Неверный приоритет',
+    12: 'Некорректные входные данные',
+    13: 'Ошибка доступа'
+}
+
 
 class Error:
 
     def __init__(self, code, desc):
         self.code = code
-        self.desc = desc
-
-    def code(self):
-        return self.code
-
-    def desc(self):
-        return self.desc
+        self.native_desc = desc
+        if code in error_base:
+            self.desc = error_base[code]
+        else:
+            self.desc = 'Неизвестная ошибка'
 
     def __repr__(self):
-        return 'Error {}: {}'.format(self.code, self.desc)
+        return 'Error {}: {}'.format(self.code, self.native_desc)
 
     def __bool__(self):
         return False
