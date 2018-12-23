@@ -12,6 +12,7 @@ class MainWindow(QMainWindow):
         login_init(self, api)
 
 
+
     def closeEvent(self, QCloseEvent):
         api.logout()
 

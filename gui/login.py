@@ -1,7 +1,6 @@
 from PyQt5 import uic
 from Planner.gui.API import Error
 from functools import partial
-from Planner.gui.registr import init as registr_init
 
 
 
@@ -16,8 +15,7 @@ def run_reg(obj, api):
 
 
 def change(obj, api):
-    uic.loadUi('registration.ui', obj)
-    registr_init(obj, api)
+    obj.change_scene('registr')
 
 
 def init(obj, api):

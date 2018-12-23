@@ -1,7 +1,6 @@
 from PyQt5 import uic
 from Planner.gui.API import Error
 from functools import partial
-from Planner.gui.login import init as login_init
 
 def initialization(obj, api):
     new_login = obj.log.text()
@@ -14,10 +13,11 @@ def initialization(obj, api):
 
 
 def change2(obj, api):
-    uic.loadUi('The Imperor planner.ui', obj)
-    login_init(obj, api)
+    obj.change_scene('login')
 
 def init(obj, api):
     uic.loadUi('registration.ui', obj)
     obj.saver.clicked.connect(partial(initialization, obj, api))
+    obj.saver.clicked.connect(partial(change2, obj, api))
+
 
