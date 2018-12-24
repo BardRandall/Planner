@@ -127,7 +127,7 @@
      <string>Создать задачу</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_8">
+   <widget class="QPushButton" name="logoutButton">
     <property name="geometry">
      <rect>
       <x>660</x>

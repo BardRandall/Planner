@@ -4,13 +4,18 @@ from functools import partial
 
 
 def run_reg(obj, api):
-    login = obj.lineEdit.text()
-    password = obj.lineEdit_2.text()
-    res = api.login(login, password)
+    login = obj.loginEdit.text()
+    password = obj.passEdit.text()
+    rpassword = obj.pass2Edit.text()
+    if password != rpassword:
+        obj.errorLabel.setText('Пароли разные')
+        return
+    res = api.register(login, password)
     if type(res) == Error:
-        pass
+        obj.errorLabel.setText(res.desc)
     else:
-        obj.lineEdit.setText('Login successful')
+        obj.errorLabel.setText('')
+        obj.change_scene('tasks')
 
 
 def run_login(obj):
@@ -20,3 +25,4 @@ def run_login(obj):
 def init(obj, api):
     uic.loadUi('register.ui', obj)
     obj.loginButton.clicked.connect(partial(run_login, obj))
+    obj.regButton.clicked.connect(partial(run_reg, obj, api))

@@ -6,7 +6,7 @@ server = 'http://yandexplanner.pythonanywhere.com/api/'
 error_base = {
     1: 'Ошибка сервера',
     2: 'Пустые данные',
-    3: 'Пользователь с таким логином',
+    3: 'Пользователь с таким логином уже существует',
     4: 'Нет пользователя с таким логином',
     5: 'Неверный логин или пароль',
     6: 'Токена не существует',
@@ -105,3 +105,10 @@ class API:
 
     def delete(self, task_id):
         return self._get_answer('tasks/delete', token=self.token, id=task_id)
+
+    def set_token(self, token):
+        res = self._get_answer('check_token', token=token)
+        if type(res) != Error:
+            self.token = token
+            return True
+        return False

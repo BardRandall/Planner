@@ -1,3 +1,4 @@
 /.idea
 /web/__pycache__
 /gui/__pycache__
+/gui/token.data

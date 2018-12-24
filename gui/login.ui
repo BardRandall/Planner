@@ -17,9 +17,9 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>10</x>
       <y>20</y>
-      <width>251</width>
+      <width>511</width>
       <height>51</height>
      </rect>
     </property>
@@ -30,6 +30,9 @@
     </property>
     <property name="text">
      <string>Вход в программу</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -100,6 +103,9 @@
     <property name="text">
      <string>Запомнить меня</string>
     </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QPushButton" name="loginButton">
     <property name="geometry">
@@ -119,7 +125,7 @@
      <rect>
       <x>290</x>
       <y>250</y>
-      <width>114</width>
+      <width>121</width>
       <height>32</height>
      </rect>
     </property>

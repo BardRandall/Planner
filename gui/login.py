@@ -1,4 +1,4 @@
-from PyQt5 import uic
+from PyQt5 import uic, QtCore
 from gui.API import Error
 from functools import partial
 
@@ -10,8 +10,11 @@ def run_login(obj, api):
     if type(res) == Error:
         obj.errorLabel.setText(res.desc)
     else:
-        obj.loginEdit.setText('Login successful')
+        if obj.rememberCheck.isChecked():
+            with open('token.data', mode='w+') as f:
+                f.write(api.token)
         obj.errorLabel.setText('')
+        obj.change_scene('tasks')
 
 
 def run_reg(obj):

@@ -161,6 +161,16 @@ def delete():
     return generate_answer(True, {})
 
 
+@app.route('/api/check_token', methods=['GET'])
+def check_tok():
+    if not check_args(request.args, 'token'):
+        return generate_answer(False, error_code=2)
+    res = check_token(request.args['token'])
+    if not res:
+        return generate_answer(False, error_code=6)
+    return generate_answer(True, {'exists': True})
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return 'Page not found - my own page'
