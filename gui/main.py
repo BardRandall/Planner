@@ -3,8 +3,9 @@ import os.path
 from gui.API import API
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from gui.login import init as login_init
-from gui.register import init as register_init  # this import is used in eval
 from gui.tasks import init as tasks_init
+from gui.register import init as register_init
+from gui.creator import init as creator_init
 
 
 class MainWindow(QMainWindow):

@@ -3,26 +3,23 @@ from gui.API import Error
 from functools import partial
 
 
-def run_reg(obj, api):
-    login = obj.loginEdit.text()
-    password = obj.passEdit.text()
-    rpassword = obj.pass2Edit.text()
-    if password != rpassword:
-        obj.errorLabel.setText('Пароли разные')
-        return
-    res = api.register(login, password)
+def initialization(obj, api):
+    new_login = obj.log.text()
+    new_password = obj.pasw.text()
+    res = api.register(new_login, new_password)
     if type(res) == Error:
-        obj.errorLabel.setText(res.desc)
+        pass
     else:
-        obj.errorLabel.setText('')
-        obj.change_scene('tasks')
+        obj.login_input.setText('Registaration successful')
 
 
-def run_login(obj):
+def change2(obj, api):
     obj.change_scene('login')
 
 
 def init(obj, api):
-    uic.loadUi('register.ui', obj)
-    obj.loginButton.clicked.connect(partial(run_login, obj))
-    obj.regButton.clicked.connect(partial(run_reg, obj, api))
+    uic.loadUi('registration.ui', obj)
+    obj.saver.clicked.connect(partial(initialization, obj, api))
+    obj.saver.clicked.connect(partial(change2, obj, api))
+
+
