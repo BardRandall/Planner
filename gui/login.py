@@ -3,6 +3,7 @@ from gui.API import Error
 from functools import partial
 from PyQt5.QtCore import QCoreApplication
 
+
 def run_login(obj, api):
     login = obj.loginEdit.text()
     password = obj.passEdit.text()

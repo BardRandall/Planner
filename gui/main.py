@@ -6,6 +6,8 @@ from gui.login import init as login_init
 from gui.tasks import init as tasks_init
 from gui.register import init as register_init
 from gui.creator import init as creator_init
+from gui.edit import init as edit_init
+from gui.view_parent import init as view_parent_init
 
 
 class MainWindow(QMainWindow):

@@ -152,8 +152,6 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
-<<<<<<< HEAD
-=======
     </property>
    </widget>
    <widget class="QScrollBar" name="verticalScrollBar">
@@ -167,7 +165,6 @@
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
->>>>>>> ba45159a4a27bea9cdb94d7573dff57c61090af0
     </property>
    </widget>
   </widget>

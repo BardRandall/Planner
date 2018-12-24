@@ -81,7 +81,7 @@ class API:
             res = self._get_answer('tasks/create', token=self.token, name=name, description=description,
                                    priority=priority)
         else:
-            res = self._get_answer('tasks/create', name=name, parent_id=parent_id,
+            res = self._get_answer('tasks/create', token=self.token, name=name, parent_id=parent_id,
                                    description=description, priority=priority)
         if type(res) != Error:
             return True
