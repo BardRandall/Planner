@@ -2,10 +2,11 @@ from PyQt5 import uic
 from Planner.gui.API import Error
 from functools import partial
 
+
 def initialization(obj, api):
     new_login = obj.log.text()
     new_password = obj.pasw.text()
-    res = api.login(new_login, new_password)
+    res = api.register(new_login, new_password)
     if type(res) == Error:
         pass
     else:
@@ -14,6 +15,7 @@ def initialization(obj, api):
 
 def change2(obj, api):
     obj.change_scene('login')
+
 
 def init(obj, api):
     uic.loadUi('registration.ui', obj)

@@ -1,13 +1,13 @@
 import sys
 import os.path
-from gui.API import API
+from Planner.gui.API import API
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
-from gui.login import init as login_init
-from gui.register import init as register_init
-from gui.tasks import init as tasks_init
-
-
+from Planner.gui.login import init as login_init
+from Planner.gui.tasks import init as tasks_init
+from Planner.gui.register import init as register_init
+from Planner.gui.creator import init as creator_init
 class MainWindow(QMainWindow):
+
 
     def __init__(self):
         super().__init__()

@@ -1,5 +1,5 @@
 from PyQt5 import uic, QtCore
-from gui.API import Error
+from Planner.gui.API import Error
 from functools import partial
 from PyQt5.QtCore import QCoreApplication
 

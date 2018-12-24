@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>878</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,7 +38,7 @@
       <x>30</x>
       <y>90</y>
       <width>678</width>
-      <height>141</height>
+      <height>671</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -114,11 +114,11 @@
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="pushButton_7">
+   <widget class="QPushButton" name="creator">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>270</y>
+      <x>10</x>
+      <y>770</y>
       <width>181</width>
       <height>41</height>
      </rect>
@@ -147,7 +147,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
