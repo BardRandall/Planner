@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>381</width>
-    <height>256</height>
+    <height>291</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -29,7 +29,7 @@
       <x>0</x>
       <y>0</y>
       <width>381</width>
-      <height>157</height>
+      <height>195</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -479,6 +479,50 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="log_error">
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="WindowText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>255</red>
+             <green>44</green>
+             <blue>2</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="WindowText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>255</red>
+             <green>44</green>
+             <blue>2</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="WindowText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>120</red>
+             <green>120</green>
+             <blue>120</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QLabel" name="password">
        <property name="font">
         <font>
@@ -496,18 +540,62 @@
       <widget class="QLineEdit" name="password_input"/>
      </item>
      <item>
+      <widget class="QLabel" name="pasw_error">
+       <property name="palette">
+        <palette>
+         <active>
+          <colorrole role="WindowText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>255</red>
+             <green>44</green>
+             <blue>2</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </active>
+         <inactive>
+          <colorrole role="WindowText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>255</red>
+             <green>44</green>
+             <blue>2</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </inactive>
+         <disabled>
+          <colorrole role="WindowText">
+           <brush brushstyle="SolidPattern">
+            <color alpha="255">
+             <red>120</red>
+             <green>120</green>
+             <blue>120</blue>
+            </color>
+           </brush>
+          </colorrole>
+         </disabled>
+        </palette>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="lostpw">
          <property name="text">
-          <string>Забыли пароль?</string>
+          <string>Выход</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="help">
          <property name="text">
-          <string>Помощь</string>
+          <string>Регистрация</string>
          </property>
         </widget>
        </item>
@@ -519,7 +607,7 @@
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>160</y>
+      <y>200</y>
       <width>121</width>
       <height>51</height>
      </rect>

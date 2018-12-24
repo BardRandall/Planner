@@ -3,6 +3,7 @@ from Planner.gui.API import API
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from Planner.gui.login import init as login_init
 from Planner.gui.registr import init as registr_init
+from Planner.gui.user_room import init as user_init
 
 
 class MainWindow(QMainWindow):

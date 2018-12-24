@@ -1,7 +1,7 @@
 from PyQt5 import uic
 from Planner.gui.API import Error
 from functools import partial
-
+from PyQt5.QtCore import QCoreApplication
 
 
 def run_reg(obj, api):
@@ -12,6 +12,7 @@ def run_reg(obj, api):
         pass
     else:
         obj.login_input.setText('Login successful')
+        obj.change_scence('user_window')
 
 
 def change(obj, api):
@@ -19,6 +20,7 @@ def change(obj, api):
 
 
 def init(obj, api):
-    uic.loadUi('The Imperor planner.ui', obj)
+    uic.loadUi('login.ui', obj)
     obj.bpass.clicked.connect(partial(run_reg, obj, api))
     obj.help.clicked.connect(partial(change, obj, api))
+    obj.lostpw.clicked.connect(QCoreApplication.instance().quit)

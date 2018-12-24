@@ -17,7 +17,7 @@ class Door(Registration):
 
 
     def initUI(self):
-        uic.loadUi('The Imperor planner.ui', self)
+        uic.loadUi('login.ui', self)
         self.bpass.clicked.connect(self.run_pass)
         self.help.clicked.connect(self.reg_run)
 
