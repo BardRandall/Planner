@@ -3,7 +3,7 @@ import os.path
 from gui.API import API
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
 from gui.login import init as login_init
-from gui.register import init as register_init
+from gui.register import init as register_init  # this import is used in eval
 from gui.tasks import init as tasks_init
 
 
@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
             api.logout()
         login_init(self, api)
 
-    def change_scene(self, name):
+    def change_scene(self, name):  # cannot be static because it use self in eval
         eval('{}_init(self, api)'.format(name))
 
 

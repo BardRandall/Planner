@@ -1,5 +1,5 @@
 from PyQt5 import uic
-from Planner.gui.API import Error
+from gui.API import Error
 from functools import partial
 
 def create(obj, api):
