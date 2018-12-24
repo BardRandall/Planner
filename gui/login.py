@@ -1,7 +1,7 @@
 from PyQt5 import uic, QtCore
 from gui.API import Error
 from functools import partial
-
+from PyQt5.QtCore import QCoreApplication
 
 def run_login(obj, api):
     login = obj.loginEdit.text()
@@ -26,4 +26,3 @@ def init(obj, api):
     obj.loginButton.clicked.connect(partial(run_login, obj, api))
     obj.regButton.clicked.connect(partial(run_reg, obj))
 
-    
