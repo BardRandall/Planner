@@ -28,6 +28,7 @@ class MainWindow(QMainWindow):
                 res = f.read()
         if not res:
             api.logout()
+        login_init(self, api)
 
     def change_scene(self, name):
         eval('{}_init(self, api)'.format(name))

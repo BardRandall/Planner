@@ -25,3 +25,5 @@ def init(obj, api):
     uic.loadUi('login.ui', obj)
     obj.loginButton.clicked.connect(partial(run_login, obj, api))
     obj.regButton.clicked.connect(partial(run_reg, obj))
+
+    
