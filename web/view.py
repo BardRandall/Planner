@@ -5,6 +5,7 @@ from web.Adapters import check_args, generate_answer, \
 
 
 required_task_fields = '`id`, `name`, `parent_id`, `progress`, `description`, `priority`'
+# to parse just this info from db
 
 
 @app.route('/')
@@ -172,5 +173,5 @@ def check_tok():
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(e):  # have to write this "e"
     return 'Page not found - my own page'

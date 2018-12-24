@@ -17,7 +17,7 @@ def init_db():
     db = pymysql.connect(db_host, db_user, db_pass, db_name)
 
 
-error_base = {
+error_base = {  # error base with descriptions
     1: 'Server Error',
     2: 'Required args empty',
     3: 'Such user already exists',
@@ -34,7 +34,7 @@ error_base = {
 }
 
 
-def check_args(request, *args):
+def check_args(request, *args):  # check args in request
     for arg in args:
         if arg not in request:
             return False
@@ -43,7 +43,7 @@ def check_args(request, *args):
     return True
 
 
-def generate_answer(success, obj=None, error_code=1):
+def generate_answer(success, obj=None, error_code=1):  # generate result
     if success:
         res = {'ok': success, 'object': obj}
     else:
@@ -64,10 +64,10 @@ def base_query(sql, is_return):
     print('Success: ' + sql)
 
 
-def query(sql, is_return=False):
+def query(sql, is_return=False):  # don't touch it!
     try:
         return base_query(sql, is_return)
-    except Exception:
+    except Exception:  # have to do it because database is unpredictable thing
         print('Trying to reconnect...')
         init_db()
         return base_query(sql, is_return)
@@ -109,7 +109,7 @@ def process_task_list(task_list):
     return res
 
 
-def get_update_sql(task_id, name, description, priority):
+def get_update_sql(task_id, name, description, priority):  # generator for update query
     sql = 'UPDATE `tasks` SET '
     sql_data = []
     if name is not None:
