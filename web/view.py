@@ -28,7 +28,7 @@ def register():
 
 @app.route('/api/login', methods=['GET'])  # create from one to four different tokens of different users
 def log_in():  # but return is correct
-    if check_args(request.args, 'login', 'password'):
+    if check_args(request.args, 'login', 'password'):  # just a magic
         login = request.args['login']
         password = request.args['password']
         res = query('SELECT * FROM users WHERE `login`="{}"'.format(login), True)
@@ -159,6 +159,16 @@ def delete():
         return generate_answer(False, error_code=13)
     query('DELETE FROM tasks WHERE `id`={0} OR `parent_id`={0}'.format(task_id))
     return generate_answer(True, {})
+
+
+@app.route('/api/check_token', methods=['GET'])
+def check_tok():
+    if not check_args(request.args, 'token'):
+        return generate_answer(False, error_code=2)
+    res = check_token(request.args['token'])
+    if not res:
+        return generate_answer(False, error_code=6)
+    return generate_answer(True, {'exists': True})
 
 
 @app.errorhandler(404)

@@ -1,26 +1,28 @@
-from PyQt5 import uic
-from Planner.gui.API import Error
+from PyQt5 import uic, QtCore
+from gui.API import Error
 from functools import partial
 from PyQt5.QtCore import QCoreApplication
 
-
-def run_reg(obj, api):
-    login = obj.login_input.text()
-    password = obj.password_input.text()
+def run_login(obj, api):
+    login = obj.loginEdit.text()
+    password = obj.passEdit.text()
     res = api.login(login, password)
     if type(res) == Error:
-        pass
+        obj.errorLabel.setText(res.desc)
     else:
-        obj.login_input.setText('Login successful')
-        obj.change_scence('user_window')
+        if obj.rememberCheck.isChecked():
+            with open('token.data', mode='w+') as f:
+                f.write(api.token)
+        obj.errorLabel.setText('')
+        obj.change_scene('tasks')
 
 
-def change(obj, api):
-    obj.change_scene('registr')
+def run_reg(obj):
+    obj.change_scene('register')
 
 
 def init(obj, api):
     uic.loadUi('login.ui', obj)
-    obj.bpass.clicked.connect(partial(run_reg, obj, api))
-    obj.help.clicked.connect(partial(change, obj, api))
-    obj.lostpw.clicked.connect(QCoreApplication.instance().quit)
+    obj.loginButton.clicked.connect(partial(run_login, obj, api))
+    obj.regButton.clicked.connect(partial(run_reg, obj))
+
