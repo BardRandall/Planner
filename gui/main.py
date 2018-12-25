@@ -1,13 +1,13 @@
 import sys
 import os.path
-from gui.API import API
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow
-from gui.login import init as login_init
-from gui.tasks import init as tasks_init
-from gui.register import init as register_init
-from gui.creator import init as creator_init
-from gui.edit import init as edit_init
-from gui.view_parent import init as view_parent_init
+from Planner.gui.API import API
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QDialog, QMessageBox
+from Planner.gui.login import init as login_init
+from Planner.gui.tasks import init as tasks_init
+from Planner.gui.register import init as register_init
+from Planner.gui.creator import init as creator_init
+from Planner.gui.edit import init as edit_init
+from Planner.gui.view_parent import init as view_parent_init
 
 
 class MainWindow(QMainWindow):
@@ -15,6 +15,13 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         res = ''
+        try:
+            api.login('', '')
+            raise ConnectionError
+        except ConnectionError:
+            QMessageBox.question(self, 'Ошибка', "Нет подключения к интернету",
+                                               QMessageBox.Yes, QMessageBox.Yes)
+            exit()
         if os.path.exists('token.data'):
             with open('token.data', mode='r+') as f:
                 res = f.read()

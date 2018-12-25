@@ -1,11 +1,11 @@
 from PyQt5 import uic, QtCore
 import os.path
-from gui.API import Error
+from Planner.gui.API import Error
 from functools import partial
 from PyQt5.QtWidgets import QHBoxLayout, QLineEdit, QProgressBar, QPushButton, QLabel, QGridLayout
 from PyQt5 import QtCore
-from gui.creator import init as creator_init
-from gui.edit import init as edit_init
+from Planner.gui.creator import init as creator_init
+from Planner.gui.edit import init as edit_init
 
 
 def run_logout(obj, api):

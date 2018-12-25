@@ -1,6 +1,7 @@
 import requests
 import json
 
+
 server = 'http://yandexplanner.pythonanywhere.com/api/'
 
 error_base = {
