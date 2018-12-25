@@ -17,7 +17,6 @@ class MainWindow(QMainWindow):
         res = ''
         try:
             api.login('', '')
-            raise ConnectionError
         except ConnectionError:
             QMessageBox.question(self, 'Ошибка', "Нет подключения к интернету",
                                                QMessageBox.Yes, QMessageBox.Yes)

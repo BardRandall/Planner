@@ -7,6 +7,7 @@ from PyQt5 import QtCore
 from Planner.gui.creator import init as creator_init
 from Planner.gui.edit import init as edit_init
 from Planner.gui.view_parent import init as view_parent_init
+from  PyQt5.QtWidgets import QCheckBox
 
 
 def run_logout(obj, api):
@@ -51,6 +52,7 @@ def load_tasks(obj, api):
         name_obj = QLabel(a[i]['name'])
         progress_object = QProgressBar()
         progress_object.setValue(a[i]['progress'])
+        btn_done = QCheckBox('Выполнено')
         btn_show = QPushButton('Смотреть подзадачи')
         btn_show.clicked.connect(partial(view_parent, obj, api, a[i]['id'], a[i]['name']))
         btn_edit = QPushButton('Редактировать')
@@ -62,6 +64,7 @@ def load_tasks(obj, api):
         obj.gridLayout.addWidget(btn_show, i, 2)
         obj.gridLayout.addWidget(btn_edit, i, 3)
         obj.gridLayout.addWidget(btn_delete, i, 4)
+        obj.gridLayout.addWidget(btn_done, i, 5)
 
 
 def init(obj, api):
