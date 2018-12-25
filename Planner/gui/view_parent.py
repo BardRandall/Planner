@@ -1,0 +1,96 @@
+from PyQt5 import uic, QtCore
+import os.path
+from Planner.gui.API import Error
+from functools import partial
+from PyQt5.QtWidgets import QHBoxLayout, QLineEdit, QProgressBar, QPushButton, QLabel, QGridLayout, QCheckBox
+from PyQt5 import QtCore
+from Planner.gui.creator import init as creator_init
+from Planner.gui.edit import init as edit_init
+
+
+def run_logout(obj, api):
+    api.logout()
+    with open('token.data', mode='w+') as f:
+        f.write('')
+    obj.change_scene('login')
+
+
+def create(obj, api, id):
+    creator_init(obj, api, id)
+
+
+def delete(obj, api, id):
+    api.delete(id)
+    init(obj, api)
+
+
+def create_linked(obj, api, id):
+    creator_init(obj, api, id)
+
+
+def edit(obj, api, id, name, desc, priority):
+    edit_init(obj, api, id, name, desc, priority)
+
+
+def view_parent(obj, api, id, name):
+    init(obj, api, id, name)
+
+
+def set_done(obj, api, id, check):
+    state = check.isChecked()
+    api.update(id, progress=int(state))
+    init(obj, api)
+
+
+def load_tasks(obj, api, id):
+    res = api.get_user_tasks()
+    if not res:
+        obj.noTasksLabel.setText('У вас нет подзадач')
+    else:
+        obj.noTasksLabel.setText('')
+    deny = 0
+    for i in range(len(res)):
+        if res[i]['parent_id'] != id:
+            deny += 1
+            continue
+        if res[i]['progress'] is None:
+            res[i]['progress'] = 0
+        name_obj = QLabel(res[i]['name'])
+        progress_object = QProgressBar()
+        progress_object.setValue(res[i]['progress'])
+        btn_show = QPushButton('Смотреть подзадачи')
+        btn_show.clicked.connect(partial(view_parent, obj, api, res[i]['id'], res[i]['name']))
+        btn_edit = QPushButton('Редактировать')
+        btn_edit.clicked.connect(partial(edit, obj, api, res[i]['id'], res[i]['name'], res[i]['description'], res[i]['priority']))
+        btn_delete = QPushButton('Удалить')
+        btn_delete.clicked.connect(partial(delete, obj, api, res[i]['id']))
+        btn_done = QCheckBox()
+        if res[i]['progress'] == 1:
+            btn_done.setChecked(True)
+        if res[i]['has_related']:
+            btn_done.setEnabled(False)
+        else:
+            btn_done.clicked.connect(partial(set_done, obj, api, res[i]['id'], btn_done))
+        obj.gridLayout.addWidget(btn_done, i, 0)
+        obj.gridLayout.addWidget(name_obj, i, 1)
+        obj.gridLayout.addWidget(progress_object, i, 2)
+        obj.gridLayout.addWidget(btn_show, i, 3)
+        obj.gridLayout.addWidget(btn_edit, i, 4)
+        obj.gridLayout.addWidget(btn_delete, i, 5)
+
+    if deny == len(res):
+        obj.noTasksLabel.setText('У вас нет подзадач')
+
+
+def to_tasks(obj):
+    obj.change_scene('tasks')
+
+
+def init(obj, api, id=None, name=''):
+    uic.loadUi('tasks.ui', obj)
+    obj.logoutButton.clicked.connect(partial(run_logout, obj, api))
+    obj.creator.clicked.connect(partial(create, obj, api, id))
+    obj.backButton.setEnabled(True)
+    obj.backButton.clicked.connect(partial(to_tasks, obj))
+    obj.titleLabel.setText('Подзадания для {}'.format(name))
+    load_tasks(obj, api, id)
